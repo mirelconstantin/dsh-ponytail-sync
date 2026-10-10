@@ -1,0 +1,14 @@
+# Every committed file is LF in the repository and in the working tree.
+#
+# The skill body is read and hashed by the test suite, so a line-ending rewrite on
+# checkout would fail the tests on Windows for a reason that has nothing to do
+# with the plugin. LF is the only setting that keeps the tree identical everywhere.
+* text=auto eol=lf
+
+# Binary files must never be line-ending translated or merged.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

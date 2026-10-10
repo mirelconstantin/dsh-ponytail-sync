@@ -1,0 +1,47 @@
+# dsh-ponytail-sync — ponytail lazy-senior-dev mode as native harness surfaces.
+#
+# This layer provides one service, one skill, one system-prompt guidance
+# section, and six slash commands. It spawns no process and reads no file
+# outside its own vendored skill body, so it is safe to enable by default in
+# every profile.
+#
+# The rows are separate so a configuration reload of one does not take the
+# others down: the prompt section and the skill registration are independent
+# effects, and the commands do not depend on the prompt.
+#
+# Plugin paths are relative, so they resolve next to this file. Nothing here
+# resolves through node_modules: a profile's node_modules holds only the plugin
+# link, never the harness packages, so every source in src/ is self-contained and
+# depends only on `ctx`.
+- insert:
+    # 1. Owns the configuration and the per-session level; publishes `ponytail`.
+    - id: ponytail-runtime
+      name: './src/index.js'
+      config:
+        # The level a new session starts at: off, lite, full or ultra.
+        #
+        # `full` is upstream's default and the level the rest of the rules are
+        # written against. `off` leaves the rules out of every prompt until the
+        # user runs `/ponytail <level>` — which is the switch for a user who
+        # wants ponytail available but not automatic.
+        defaultLevel: full
+        # Whether the system-prompt section is published at all. Turning this off
+        # leaves the skill and the commands mounted, so the rules are still
+        # loadable on demand through `/ponytail` or the `skill` tool.
+        promptEnabled: true
+        # Character budget for the rendered section. The section is repeated on
+        # every request of every session, so it is bounded like any other prompt
+        # text; the full ruleset lives in the skill body, not here.
+        maxSectionChars: 4000
+    # 2. The skill the model loads for the full ruleset.
+    - id: ponytail-skill
+      name: './src/entry-skill.js'
+      inject: [skills]
+    # 3. The system-prompt guidance that makes the mode known.
+    - id: ponytail-prompt
+      name: './src/entry-prompt.js'
+      inject: [systemPrompt, ponytail]
+    # 4. The slash commands.
+    - id: ponytail-command
+      name: './src/entry-command.js'
+      inject: [commands, ponytail]

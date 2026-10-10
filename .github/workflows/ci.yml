@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # The plugin contract: levels, section rendering, skill visibility, command
+      # registration, and the publishing guarantees.
+      - name: Test
+        run: npm test
+
+      # The bundle patch must keep resolving against the package, and the declared
+      # icon must keep being a real, self-contained image that ships.
+      - name: Check the package
+        run: node scripts/check-patch.mjs
+
+      # What npm would actually publish must contain every entry point, the skill
+      # body and the icon. A `files` entry that stops matching is a package that
+      # installs and then fails to load.
+      - name: Check the published file list
+        run: node scripts/check-pack.mjs
+
+      # A pull request must never leave the working tree dirty. The step is pinned
+      # to bash because the shell on windows-latest is PowerShell, where `||`
+      # between commands is a parser error rather than a short circuit.
+      - name: Fail on an uncommitted diff
+        shell: bash
+        run: |
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            git --no-pager diff >&2
+            echo "The working tree is dirty after verification." >&2
+            exit 1
+          fi

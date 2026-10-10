@@ -1,0 +1,9 @@
+# Build outputs and editor residue.
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# The vendored prompt is committed source, not generated output: keeping it in
+# the repository is what lets a git install resolve the skill body without a
+# build step.

@@ -1,0 +1,78 @@
+{
+  "name": "dsh-ponytail-sync",
+  "version": "1.0.0",
+  "description": "Ponytail lazy-senior-dev mode as a native DeepSeek Harness skill, system-prompt section and six slash commands. Always available, level-switchable, no external process.",
+  "icon": "./icon.svg",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./prompt": "./src/entry-prompt.js",
+    "./skill": "./src/entry-skill.js",
+    "./command": "./src/entry-command.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "assets",
+    "scripts",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "cordis",
+    "plugin",
+    "dsh-plugin",
+    "dsh-plugins",
+    "dsh-external",
+    "deepseek-harness-plugin",
+    "codis-plugin",
+    "ponytail",
+    "yagni",
+    "simplicity",
+    "skill",
+    "system-prompt"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirelconstantin/dsh-ponytail-sync.git"
+  },
+  "homepage": "https://github.com/mirelconstantin/dsh-ponytail-sync#readme",
+  "bugs": {
+    "url": "https://github.com/mirelconstantin/dsh-ponytail-sync/issues"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": "~3.18.4"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "compatibility": {
+      "dshReleases": {
+        "0.2.0-rc.2": "compatible"
+      }
+    }
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "prepublishOnly": "node scripts/prepublish.mjs",
+    "prepublish": "node scripts/prepublish.mjs",
+    "test": "node scripts/check-plugin.mjs",
+    "test:unit": "node scripts/check-plugin.mjs"
+  }
+}
